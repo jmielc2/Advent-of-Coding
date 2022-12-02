@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <time.h>
+
+#define BUFFER_SIZE 16
 
 void getline(FILE* file, char* buf) {
-    memset(buf, '\0', sizeof(buf));
+    memset(buf, '\0', sizeof(char) * BUFFER_SIZE);
     char a = 'a';
     int i = 0;
     while (a != '\n') {
@@ -27,7 +28,7 @@ int main() {
 
     int max[3];
     int sum = 0;
-    char input[128];
+    char input[BUFFER_SIZE];
 
     memset(&max, 0, sizeof(int) * 3);
     while (!feof(infile)) {
