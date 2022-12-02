@@ -10,18 +10,6 @@ using namespace std;
 enum {X=0,Y=3,Z=6};
 enum {A=1,B=2,C=3};
 
-int isWinner(const char &a, const char &b) {
-    int p1 = a - 'A';
-    int p2 = b - 'A';
-    
-    if (p2 - p1 == 1 || (p2 == 0 && p1 == 2)) {
-        return 2;
-    } else if (p1 - p2 == 1 || (p1 == 0 && p2 == 2)) {
-        return 1;
-    }
-    return 0;
-}
-
 int getPlay(const int &opp, const int &outcome) {
     int play;
     if (outcome == Z) {
