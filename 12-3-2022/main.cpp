@@ -60,6 +60,7 @@ int main(int argc, char *argv[]) {
         items.clear();
         counts.clear();
     }
+    file.close();
 
     cout << "Total: " << sum << endl;
     return 0;

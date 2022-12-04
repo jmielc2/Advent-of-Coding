@@ -19,10 +19,18 @@ void getline(FILE* file, char* buf) {
     buf[i - 1] = '\0';
 }
 
-int main() {
-    FILE* infile = fopen("input.txt", "r");
+int main(int argc, char* argv[]) {
+    char *filename = "input.txt";
+    if (argc == 2) {
+        filename = argv[1];
+    } else if (argc > 2) {
+        fprintf(stderr, "Usage: %s [<filename>]\n", argv[0]);
+        return -1;
+    }
+
+    FILE* infile = fopen(filename, "r");
     if (!infile) {
-        fprintf(stderr, "Error: Failed to open input.txt.");
+        fprintf(stderr, "Error: Failed to open '%s'.", filename);
         return -1;
     }
 
@@ -47,6 +55,7 @@ int main() {
             sum += atoi(input);
         }
     }
+    fclose(infile);
 
     sum = 0;
     printf("Top Three Elves:\n");

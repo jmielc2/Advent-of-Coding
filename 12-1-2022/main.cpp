@@ -5,10 +5,18 @@
 
 using namespace std;
 
-int main() {
-    ifstream infile("input.txt");
+int main(int argc, char* argv[]) {
+    string filename = "input.txt";
+    if (argc == 2) {
+        filename = argv[1];
+    } else if (argc > 2) {
+        cerr << "Usage: " << argv[0] << " [<filename>]" << endl;
+        return -1;
+    }
+
+    ifstream infile(filename);
     if (!infile.is_open()) {
-        cerr << "Error: Failed to open input.txt" << endl;
+        cerr << "Error: Failed to open '" << filename << "'." << endl;
         return -1;
     }
 
@@ -33,6 +41,7 @@ int main() {
             sum += atoi(input.c_str());
         }
     }
+    infile.close();
 
     cout << "Top Three Elves:" << endl;
     sum = 0;

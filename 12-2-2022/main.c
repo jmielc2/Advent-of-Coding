@@ -38,11 +38,18 @@ void getline(FILE* file, char* buf) {
     }
 } 
 
-int main() {
+int main(int argc, char* argv[]) {
     char *filename = "input.txt";
+    if (argc == 2) {
+        filename = argv[1];
+    } else if (argc > 2) {
+        fprintf(stderr, "Usage: %s [<filename>]\n", argv[0]);
+        return -1;
+    }
+
     FILE* file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "Error: Failed to open %s.\n", filename);
+        fprintf(stderr, "Error: Failed to open '%s'.\n", filename);
         return -1;
     }
 
@@ -68,6 +75,7 @@ int main() {
         }
         score += round;
     }
+    fclose(file);
 
     printf("Final Score: %d\n", score);
     return 0;
