@@ -67,9 +67,7 @@ string substr(const char* buf, int index, int size) {
     string a = initString();
     a.size = size;
     a.buf = (char*) malloc(sizeof(char) * (size + 1));
-    for (int i = 0; i < size; i++) {
-        a.buf[i] = buf[index + i]; 
-    }
+    memcpy(a.buf, &buf[index], size);
     a.buf[size] = '\0';
     return a;
 }
