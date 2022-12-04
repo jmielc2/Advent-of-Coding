@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <string.h>
+#include "../include/ctools.h"
 
 enum {A=1, B=2, C=3};
 enum {X=0, Y=3, Z=6};
@@ -24,20 +23,6 @@ int getPlay(const int *opp, const int outcome) {
     return play + outcome;
 }
 
-void getline(FILE* file, char* buf) {
-    memset(buf, '\0', sizeof(char) * 8);
-    char a = 'a';
-    int i = 0;
-    while (a != '\n') {
-        if (EOF != (a = getc(file))) {
-            buf[i] = a;
-        } else {
-            break;
-        }
-        i++;
-    }
-} 
-
 int main(int argc, char* argv[]) {
     char *filename = "input.txt";
     if (argc == 2) {
@@ -53,16 +38,16 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    char input[8];
+    string input = initString();
     int round, score = 0;
     while (!feof(file)) {
         round = 0;
-        getline(file, input);
-        if (strcmp("", input) == 0) {
+        getline(file, &input);
+        if (!strcmp("", input.buf)) {
             continue;
         }
-        int opp = input[0] - 'A' + 1;
-        switch (input[2]) {
+        int opp = input.buf[0] - 'A' + 1;
+        switch (input.buf[2]) {
         case('X'):
             round += getPlay(&opp, X);
             break;
@@ -78,5 +63,6 @@ int main(int argc, char* argv[]) {
     fclose(file);
 
     printf("Final Score: %d\n", score);
+    destroyString(input);
     return 0;
 }

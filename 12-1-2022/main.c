@@ -1,23 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-#define BUFFER_SIZE 16
-
-void getline(FILE* file, char* buf) {
-    memset(buf, '\0', sizeof(char) * BUFFER_SIZE);
-    char a = 'a';
-    int i = 0;
-    while (a != '\n') {
-        if (EOF != (a = getc(file))) {
-            buf[i] = a;
-        } else {
-            break;
-        }
-        i++;
-    }
-    buf[i - 1] = '\0';
-}
+#include "../include/ctools.h"
 
 int main(int argc, char* argv[]) {
     char *filename = "input.txt";
@@ -36,12 +17,11 @@ int main(int argc, char* argv[]) {
 
     int max[3];
     int sum = 0;
-    char input[BUFFER_SIZE];
-
+    string input = initString();
     memset(&max, 0, sizeof(int) * 3);
     while (!feof(infile)) {
-        getline(infile, input);
-        if (!strcmp(input, "\0")) {
+        getline(infile, &input);
+        if (!strcmp(input.buf, "\0")) {
             for (int i = 0; i < 3; i++) {
                 if (max[i] > sum) {
                     break;
@@ -52,7 +32,7 @@ int main(int argc, char* argv[]) {
             }
             sum = 0;
         } else {
-            sum += atoi(input);
+            sum += atoi(input.buf);
         }
     }
     fclose(infile);
@@ -64,5 +44,6 @@ int main(int argc, char* argv[]) {
         sum += max[i];
     }
     printf("\nTotal: %d\n", sum);
+    destroyString(input);
     return 0;
 }
