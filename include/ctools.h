@@ -30,7 +30,7 @@ int f_getline_base(FILE* file, string *input, char delim) {
         buf[size] = a;
         size++;
     }
-    input->buf = malloc(sizeof(char) * (size + 1));
+    input->buf = (char*) malloc(sizeof(char) * (size + 1));
     if (!input->buf) {
         perror("malloc failed to allocate space.");
         return 0;
@@ -58,13 +58,15 @@ string initString() {
 void destroyString(string a) {
     if (a.buf) {
         free(a.buf);
+        a.buf = NULL;
     }
+    a.size = 0;
 }
 
 string substr(const char* buf, int index, int size) {
     string a = initString();
     a.size = size;
-    a.buf = malloc(sizeof(char) * (size + 1));
+    a.buf = (char*) malloc(sizeof(char) * (size + 1));
     for (int i = 0; i < size; i++) {
         a.buf[i] = buf[index + i]; 
     }
