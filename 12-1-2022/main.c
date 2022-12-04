@@ -20,7 +20,10 @@ int main(int argc, char* argv[]) {
     string input = initString();
     memset(&max, 0, sizeof(int) * 3);
     while (!feof(infile)) {
-        getline(infile, &input);
+        if (!getline(infile, &input)) {
+            fprintf(stderr, "Error: getline function failed.\n");
+            return -1;
+        }
         if (!strcmp(input.buf, "\0")) {
             for (int i = 0; i < 3; i++) {
                 if (max[i] > sum) {

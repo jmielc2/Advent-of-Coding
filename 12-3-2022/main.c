@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
     FILE* file = fopen(filename,  "r");
     if (!file) {
-        fprintf(stderr, "Failed to open '%s'.\n", filename);
+        fprintf(stderr, "Error: Failed to open '%s'.\n", filename);
         return -1;
     }
 
@@ -60,7 +60,8 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-
+    fclose(file);
+    
     printf("Total: %d\n", sum);
     destroyString(input);
     return 0;

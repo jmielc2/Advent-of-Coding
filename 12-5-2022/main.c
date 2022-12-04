@@ -1,13 +1,4 @@
 #include "../include/ctools.h"
-#include <ctype.h>
-
-int contains(int vals[]) {
-    return (vals[0] <= vals[2] && vals[1] >= vals[3]) || (vals[0] >= vals[2] && vals[1] <= vals[3]);
-}
-
-int overlap(int vals[]) {
-    return (vals[0] >= vals[2] && vals[0] <= vals[3]) || (vals[1] >= vals[2] && vals[1] <= vals[3]) || contains(vals);
-}
 
 int main(int argc, char* argv[]) {
     char* filename = "input.txt";
@@ -34,21 +25,9 @@ int main(int argc, char* argv[]) {
         if (!strcmp("", input.buf)) {
             continue;
         }
-        int i = 0, j = 0;
-        int vals[4];
-        for (int k = 0; k < 4; k++) {
-            while (isdigit(input.buf[j])) {
-                j++;
-            }
-            string a = substr(input.buf, i, j - i);
-            vals[k] = atoi(a.buf);
-            j++;
-            i = j;
-            destroyString(a);
-        }
-        if (overlap(vals)) {
-            count++;
-        }
+        
+        // Do Processing Here
+
     }
     fclose(file);
     

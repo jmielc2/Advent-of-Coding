@@ -42,7 +42,10 @@ int main(int argc, char* argv[]) {
     int round, score = 0;
     while (!feof(file)) {
         round = 0;
-        getline(file, &input);
+        if (!getline(file, &input)) {
+            fprintf(stderr, "Error: getline function failed.\n");
+            return -1;
+        }
         if (!strcmp("", input.buf)) {
             continue;
         }
