@@ -3,6 +3,13 @@
 #include <string.h>
 
 #define BUF_SIZE 128
+#define DEBUG 1
+
+#if DEBUG
+#define LOG(...) fprintf(stderr, __VA_ARGS__)
+#else
+#define LOG(...) 
+#endif
 
 typedef struct {
     char *buf;
@@ -24,7 +31,7 @@ int f_getline_base(FILE* file, string *input, char delim) {
     int size = 0;
     while ((a = fgetc(file)) != EOF && a != delim) {
         if (size == BUF_SIZE) {
-            fprintf(stderr, "BUF_SIZE is too small.\n");
+            LOG("BUF_SIZE is too small.\n");
             return 0;
         }
         buf[size] = a;
@@ -65,6 +72,10 @@ void destroyString(string a) {
 
 string substr(const char* buf, int index, int size) {
     string a = initString();
+    if (strlen(buf) < index + size) {
+        LOG("Error: substr function failed.\n");
+        return a;
+    }
     a.size = size;
     a.buf = (char*) malloc(sizeof(char) * (size + 1));
     memcpy(a.buf, &buf[index], size);
