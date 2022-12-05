@@ -8,7 +8,7 @@
 #if DEBUG
 #define LOG(...) fprintf(stderr, __VA_ARGS__)
 #else
-#define LOG(...) 
+#define LOG(...)
 #endif
 
 typedef struct {

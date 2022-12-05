@@ -51,9 +51,6 @@ int main(int argc, char* argv[]) {
         }
     }
     fclose(file);
-
-    string b = substr("abc", 1, 3);
-    destroyString(b);
     
     printf("Total: %d\n", count);
     destroyString(input);
