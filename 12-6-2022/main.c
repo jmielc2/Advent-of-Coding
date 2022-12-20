@@ -22,7 +22,6 @@ int main(int argc, char* argv[]) {
     int count = 0;
     string input = initString();
     getline(file, &input);
-    // printf("%s\n", input.buf);
 
     unsigned long long int i = 0;
     for (; i < SEQ_LEN; i++) {
