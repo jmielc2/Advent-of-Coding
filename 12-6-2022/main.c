@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
         }
         i++;
     } while (i < input.size);
-    destroyString(input);
+    destroyString(&input);
 
     fclose(file);
     return 0;

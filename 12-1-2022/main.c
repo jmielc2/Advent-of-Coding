@@ -47,6 +47,6 @@ int main(int argc, char* argv[]) {
         sum += max[i];
     }
     printf("\nTotal: %d\n", sum);
-    destroyString(input);
+    destroyString(&input);
     return 0;
 }

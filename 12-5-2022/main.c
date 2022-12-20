@@ -30,12 +30,12 @@ void readGrid(FILE* file) {
     for (int i = 0; i < DIM_X; i++) {
         reverse(&grid[i]);
     }
-    destroyString(input);
+    destroyString(&input);
 }
 
 void processMoves(FILE* file) {
     string input = initString();
-    destroyString(input);
+    destroyString(&input);
     while (!feof(file)) {
         getline(file, &input);
         if (!strcmp(input.buf, "")) {

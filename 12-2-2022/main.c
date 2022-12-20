@@ -66,6 +66,6 @@ int main(int argc, char* argv[]) {
     fclose(file);
 
     printf("Final Score: %d\n", score);
-    destroyString(input);
+    destroyString(&input);
     return 0;
 }

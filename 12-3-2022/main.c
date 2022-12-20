@@ -63,6 +63,6 @@ int main(int argc, char* argv[]) {
     fclose(file);
     
     printf("Total: %d\n", sum);
-    destroyString(input);
+    destroyString(&input);
     return 0;
 }
