@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
 
     string input;
     getline(file, input);
+    file.close();
 
     map<char, int> letters;
     unsigned long long int i = 0;
@@ -43,6 +44,6 @@ int main(int argc, char* argv[]) {
         letters[input[i]]++;
         i++;
     } while (i < input.size());
-    
+
     return 0;
 }
