@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
 Template/**
+test.txt
 
 # Compiled Object files
 *.slo
