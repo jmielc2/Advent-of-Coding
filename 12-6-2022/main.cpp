@@ -1,8 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
 
 using namespace std;
+
+#define SEQ_LEN 14
 
 int main(int argc, char* argv[]) {
     string filename = "input.txt";
@@ -19,6 +22,27 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    string input;
+    getline(file, input);
+
+    map<char, int> letters;
+    unsigned long long int i = 0;
+    for (; i < SEQ_LEN; i++) {
+        letters[input[i]]++;
+    }
+
+    do {
+        if (letters.size() == SEQ_LEN) {
+            cout << "Signal Found At: " << i << endl;
+            break;
+        }
+        letters[input[i - SEQ_LEN]]--;
+        if (letters[input[i - SEQ_LEN]] == 0) {
+            letters.erase(input[i - SEQ_LEN]);
+        }
+        letters[input[i]]++;
+        i++;
+    } while (i < input.size());
     
     return 0;
 }

@@ -1,5 +1,7 @@
 #include "../include/ctools.h"
 
+#define SEQ_LEN 14
+
 int main(int argc, char* argv[]) {
     char* filename = "input.txt";
     if (argc == 2) {
@@ -15,7 +17,37 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-        
+    int letters[26];
+    memset(&letters, 0, sizeof(letters));
+    int count = 0;
+    string input = initString();
+    getline(file, &input);
+    // printf("%s\n", input.buf);
+
+    unsigned long long int i = 0;
+    for (; i < SEQ_LEN; i++) {
+        letters[input.buf[i] - 'a']++;
+        if (letters[input.buf[i] - 'a'] == 1) {
+            count++;
+        }
+    }
+
+    do {
+        if (count == SEQ_LEN) {
+            printf("Signal Found At: %lld\n", i);
+            break;
+        }
+        letters[input.buf[i - SEQ_LEN] - 'a']--;
+        if (letters[input.buf[i - SEQ_LEN] - 'a'] == 0) {
+            count--;
+        }
+        letters[input.buf[i] - 'a']++;
+        if (letters[input.buf[i] - 'a'] == 1) {
+            count++;
+        }
+        i++;
+    } while (i < input.size);
+    destroyString(input);
 
     return 0;
 }

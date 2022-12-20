@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BUF_SIZE 128
+#define BUF_SIZE 256
 #define DEBUG 1
 
 #if DEBUG
@@ -13,7 +13,7 @@
 
 typedef struct {
     char *buf;
-    int size;
+    unsigned long long int size;
 } string;
 
 typedef struct {
@@ -34,23 +34,28 @@ int f_getline_base(FILE* file, string *input, char delim) {
     }
     input->size = 0;
     char buf[BUF_SIZE], a;
-    int size = 0;
     while ((a = fgetc(file)) != EOF && a != delim) {
-        if (size == BUF_SIZE) {
-            LOG("ERROR: getline function failed -> BUF_SIZE too small\n");
-            return 0;
+        if (input->size < BUF_SIZE) {
+            buf[input->size] = a;
         }
-        buf[size] = a;
-        size++;
+        input->size++;
     }
-    input->buf = (char*) malloc(sizeof(char) * (size + 1));
+    input->buf = (char*) malloc(sizeof(char) * (input->size + 1));
     if (!input->buf) {
         perror("malloc failed to allocate space");
         return 0;
     }
-    memcpy(input->buf, buf, size);
-    input->buf[size] = '\0';
-    input->size = size;
+    if (input->size >= BUF_SIZE) {
+        memcpy(input->buf, buf, BUF_SIZE);
+        fseek(file, -1 * (input->size - BUF_SIZE + 1), SEEK_CUR);
+        for (int i = BUF_SIZE; i < input->size; i++) {
+            a = fgetc(file);
+            input->buf[i] = a;
+        }
+    } else {
+        memcpy(input->buf, buf, input->size);
+    }
+    input->buf[input->size] = '\0';
     return 1;
 }
 
