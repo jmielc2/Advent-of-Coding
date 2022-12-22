@@ -1,1 +1,0 @@
-add_library(ctools ctools.c)
