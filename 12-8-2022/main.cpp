@@ -8,7 +8,7 @@ using namespace std;
 const int xOffset[] = {0, 1, 0, -1};
 const int yOffset[] = {-1, 0, 1, 0};
 
-int height = 0, width;
+int height, width;
 vector<vector<int>> trees;
 
 bool isVisible(const int x, const int y) {
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
         if (input == "") {
             continue;
         }
-        
+
         vector<int> tmp;
         for (char &a : input) {
             tmp.push_back(a - 48);
