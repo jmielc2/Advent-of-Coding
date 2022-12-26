@@ -73,23 +73,20 @@ int main(int argc, char* argv[]) {
     }
 
     string input;
-    getline(file, input);
-    width = input.size();
-    file.clear();
-    file.seekg(0);
     while (!file.eof()) {
         getline(file, input);
         if (input == "") {
             continue;
         }
+        
         vector<int> tmp;
-
         for (char &a : input) {
             tmp.push_back(a - 48);
         }
         trees.push_back(tmp);
-        height++;
     }
+    height = (int) trees.size();
+    width = (int) trees[0].size();
 
     int maxScore = 0, count = 0;
     for (int i = 0; i < height; i++) {
