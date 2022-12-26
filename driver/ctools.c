@@ -1,8 +1,6 @@
-#include "ctools.h"
+#include "../include/ctools.h"
 
 #define BUF_SIZE 256
-
-
 
 int f_getline_base(FILE* file, string *input, char delim) {
     if (input->buf != NULL) {
@@ -40,11 +38,21 @@ int f_getline_var(f_getline_args in) {
     return f_getline_base(in.file, in.input, delim);
 }
 
-string initString() {
+string f_initString_base(const char* content) {
     string a;
-    a.buf = NULL;
-    a.size = 0;
+    a.size = strlen(content);
+    if (a.size > 0) {
+        a.buf = (char*) malloc(strlen(content));
+        memcpy(a.buf, &content, strlen(content));
+    } else {
+        a.buf = NULL;
+    }
     return a;
+}
+
+string f_initString_var(f_initString_args in) {
+    in.content = (in.content)? in.content : "";
+    return f_initString_base(in.content);
 }
 
 void destroyString(string *a) {
@@ -69,10 +77,13 @@ string substr(const char* buf, int index, int size) {
 }
 
 container initContainer(int size) {
+    if (size <= 0) {
+        size = 4;
+    }
     container newStack;
     newStack.size = size;
     newStack.top = -1;
-    newStack.buf = (size_t*) malloc(sizeof(size_t) * size);
+    newStack.buf = (size_t*) malloc(sizeof(size_t) * newStack.size);
     return newStack;
 }
 
@@ -90,8 +101,18 @@ int pop_back(container *a) {
         LOG("ERROR: pop_back function failed -> already empty\n");
         return 0;
     }
+    a->buf[a->top] = 0;
     a->top--;
     return 1;
+}
+
+static void expand_container(container *a) {
+    size_t *tmp = malloc(sizeof(size_t) * a->size * 2);
+    memcpy(&tmp, a->buf, sizeof(size_t) * a->size);
+    memset(&tmp[a->size], 0, sizeof(size_t) * a->size);
+    a->size *= 2;
+    free(a->buf);
+    a->buf = tmp;
 }
 
 int push_back(container *a, size_t b) {
@@ -100,6 +121,9 @@ int push_back(container *a, size_t b) {
         return 0;
     }
     a->top++;
+    if (a->top == a->size) {
+        expand_container(a);
+    }
     a->buf[a->top] = b;
     return 1;
 }

@@ -3,6 +3,8 @@
 *.bat
 Template/**
 test.txt
+.vscode/**
+**/Makefile
 
 # Compiled Object files
 *.slo

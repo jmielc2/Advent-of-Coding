@@ -27,11 +27,17 @@ typedef struct {
     char delim;
 } f_getline_args;
 
+typedef struct {
+    const char* content;
+} f_initString_args;
+
 extern int f_getline_var(f_getline_args in);
 
 #define getline(...) f_getline_var((f_getline_args){__VA_ARGS__})
 
-extern string initString();
+extern string f_initString_var(f_initString_args in);
+
+#define initString(...) f_initString_var((f_initString_args){__VA_ARGS__})
 
 extern void destroyString(string *a);
 
