@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <map>
 
 using namespace std;
 
@@ -14,7 +13,6 @@ struct dir {
     string name;
     dir* parent;
     vector<dir> subDirs;
-    map<string, unsigned int> files;
     unsigned int size;
 
     dir(string name, dir* parent) {
@@ -56,18 +54,10 @@ void changeDirs(const string &newDir) {
     if (newDir == "/") {
         curDir = &root;
     } else if (newDir == "..") {
-        if (curDir->parent) {
-            curDir = curDir->parent;
-        } else {
-            cerr << "ERROR: Root directory " << curDir->name << " has no parent." << endl;
-        }
+        curDir = curDir->parent;
     } else {
         dir* temp = getSubDir(newDir);
-        if (temp) {
-            curDir = temp;
-        } else {
-            cerr << "ERROR: " << curDir->name << " has no sub directory '" << newDir << "'." << endl;
-        }
+        curDir = temp;
     }
     getline(file, input);
 }
@@ -80,18 +70,13 @@ void buildDirs() {
         }
         vector<string> parts = split(input, ' ');
         if (parts[0] == "dir") {
-            if (!getSubDir(parts[1])) {
-                curDir->subDirs.push_back(dir(parts[1], curDir));
-            }
+            curDir->subDirs.push_back(dir(parts[1], curDir));
         } else {
-            if (!curDir->files.count(parts[1])) {
-                int size = atoi(parts[0].c_str());
-                curDir->files.emplace(parts[1], size);
-                dir* temp = curDir;
-                while (temp) {
-                    temp->size += size;
-                    temp = temp->parent;
-                }
+            int size = atoi(parts[0].c_str());
+            dir* temp = curDir;
+            while (temp) {
+                temp->size += size;
+                temp = temp->parent;
             }
         }
     } while (input[0] != '$' && !file.eof());
@@ -105,7 +90,7 @@ void parseCommand(string cmd) {
     vector<string> parts = split(cmd, ' ');
     if (parts[0] == "cd") {
         changeDirs(parts[1]);
-    } else if (parts[0] == "ls") {
+    } else {
         buildDirs();
     }
 }

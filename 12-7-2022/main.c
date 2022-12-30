@@ -4,7 +4,7 @@
 #define DESIRED 30000000
 #define TOTAL_SPACE 70000000
 
-typedef struct dir {
+typedef struct Dir {
     string name;
     size_t parent;
     container subDirs;
@@ -68,18 +68,10 @@ void changeDirs(string newDir) {
     if (!strcmp(newDir.buf, "/")) {
         curDir = &root;
     } else if (!strcmp(newDir.buf, "..")) {
-        if (curDir->parent) {
-            curDir = (dir*) curDir->parent;
-        } else {
-            fprintf(stderr, "ERROR: Root directory '%s' has no parent.\n", curDir->name.buf);
-        }
+        curDir = (dir*) curDir->parent;
     } else {
         dir* temp = getSubDir(newDir);
-        if (temp) {
-            curDir = temp;
-        } else {
-            fprintf(stderr, "ERROR: '%s' has no sub directory '%s'.\n", curDir->name.buf, newDir.buf);
-        }
+        curDir = temp;
     }
     getline(file, &input);
     return;
@@ -103,6 +95,10 @@ void buildDirs() {
                 temp->size += size;
                 temp = (dir*) temp->parent;
             }
+        }
+        for (int i = 0; i <= parts.top; i++) {
+            destroyString((string*) parts.buf[i]);
+            free((string*) parts.buf[i]);
         }
         destroyContainer(&parts);
     } while (input.buf[0] != '$' && !feof(file));
