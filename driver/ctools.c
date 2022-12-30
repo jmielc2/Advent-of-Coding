@@ -42,8 +42,9 @@ string f_initString_base(const char* content) {
     string a;
     a.size = strlen(content);
     if (a.size > 0) {
-        a.buf = (char*) malloc(strlen(content));
-        memcpy(a.buf, &content, strlen(content));
+        a.buf = (char*) malloc(a.size + 1);
+        a.buf[a.size] = '\0';
+        memcpy(a.buf, content, a.size);
     } else {
         a.buf = NULL;
     }

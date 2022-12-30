@@ -12,13 +12,13 @@
 
 typedef struct {
     char *buf;
-    unsigned long long int size;
+    size_t size;
 } string;
 
 typedef struct {
     size_t *buf;
-    int top;
-    int size;
+    long long int top;
+    size_t size;
 } container;
 
 typedef struct {

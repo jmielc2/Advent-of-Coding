@@ -56,13 +56,17 @@ void changeDirs(const string &newDir) {
     if (newDir == "/") {
         curDir = &root;
     } else if (newDir == "..") {
-        curDir = curDir->parent;
+        if (curDir->parent) {
+            curDir = curDir->parent;
+        } else {
+            cerr << "ERROR: Root directory " << curDir->name << " has no parent." << endl;
+        }
     } else {
         dir* temp = getSubDir(newDir);
         if (temp) {
             curDir = temp;
         } else {
-            cerr << "ERROR: No sub directory '" << newDir << "' found." << endl;
+            cerr << "ERROR: " << curDir->name << " has no sub directory '" << newDir << "'." << endl;
         }
     }
     getline(file, input);
