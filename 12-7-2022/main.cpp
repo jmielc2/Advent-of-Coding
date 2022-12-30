@@ -159,7 +159,10 @@ int main(int argc, char* argv[]) {
     }
 
     unsigned int minDirSize = smallestDir(root);
-    cout << "Smallest Directory Size: " << minDirSize << endl;
+    int count = 0;
+    unsigned int space = isValidSize(root, count);
+    cout << "Number of Valid Directories: " << count << " (" << space << " bytes)" << endl;
+    cout << "Optimal Directory Size: " << minDirSize << endl;
 
     file.close();
     return 0;

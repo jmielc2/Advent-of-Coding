@@ -10,12 +10,12 @@
 #define LOG(...)
 #endif
 
-typedef struct {
+typedef struct String {
     char *buf;
     size_t size;
 } string;
 
-typedef struct {
+typedef struct Container {
     size_t *buf;
     long long int top;
     size_t size;

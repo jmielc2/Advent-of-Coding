@@ -1,14 +1,18 @@
 #include "../include/ctools.h"
 
+#define THRESHOLD 100000
+#define DESIRED 30000000
+#define TOTAL_SPACE 70000000
+
 typedef struct dir {
     string name;
     size_t parent;
     container subDirs;
     unsigned int size;
-} Dir;
+} dir;
 
-Dir initDir(const char* name, Dir* parent) {
-    Dir newDir;
+dir initDir(const char* name, dir* parent) {
+    dir newDir;
     newDir.name = initString(name);
     newDir.parent = (size_t) parent;
     newDir.subDirs = initContainer(0);
@@ -16,18 +20,18 @@ Dir initDir(const char* name, Dir* parent) {
     return newDir;
 }
 
-void destroyDir(Dir* dir) {
-    destroyString(&dir->name);
-    for (int i = 0; i <= dir->subDirs.top; i++) {
-        destroyDir((Dir*) dir->subDirs.buf[i]);
+void destroyDir(dir* cur) {
+    destroyString(&cur->name);
+    for (int i = 0; i <= cur->subDirs.top; i++) {
+        destroyDir((dir*) cur->subDirs.buf[i]);
     }
-    destroyContainer(&(dir->subDirs));
+    destroyContainer(&(cur->subDirs));
 }
 
 FILE* file = NULL;
 string input;
-Dir root;
-Dir* curDir = NULL;
+dir root;
+dir* curDir = NULL;
 
 container split(const char* cmd, char delim) {
     container res = initContainer(2);
@@ -51,10 +55,10 @@ container split(const char* cmd, char delim) {
     return res;
 }
 
-Dir* getSubDir(string newDir) {
+dir* getSubDir(string newDir) {
     for (int i = 0; i <= curDir->subDirs.top; i++) {
-        if (!strcmp(newDir.buf, ((Dir*) curDir->subDirs.buf[i])->name.buf)) {
-            return (Dir*) curDir->subDirs.buf[i];
+        if (!strcmp(newDir.buf, ((dir*) curDir->subDirs.buf[i])->name.buf)) {
+            return (dir*) curDir->subDirs.buf[i];
         }
     }
     return NULL;
@@ -65,12 +69,12 @@ void changeDirs(string newDir) {
         curDir = &root;
     } else if (!strcmp(newDir.buf, "..")) {
         if (curDir->parent) {
-            curDir = (Dir*) curDir->parent;
+            curDir = (dir*) curDir->parent;
         } else {
             fprintf(stderr, "ERROR: Root directory '%s' has no parent.\n", curDir->name.buf);
         }
     } else {
-        Dir* temp = getSubDir(newDir);
+        dir* temp = getSubDir(newDir);
         if (temp) {
             curDir = temp;
         } else {
@@ -89,8 +93,18 @@ void buildDirs() {
         }
         container parts = split(input.buf, ' ');
         if (!strcmp("dir", ((string*) parts.buf[0])->buf)) {
-
+            dir* newDir = malloc(sizeof(dir));
+            *newDir = initDir(((string*) parts.buf[1])->buf, curDir);
+            push_back(&curDir->subDirs, (size_t) newDir);
+        } else {
+            int size = atoi(((string*) parts.buf[0])->buf);
+            dir* temp = curDir;
+            while (temp) {
+                temp->size += size;
+                temp = (dir*) temp->parent;
+            }
         }
+        destroyContainer(&parts);
     } while (input.buf[0] != '$' && !feof(file));
     return;
 }
@@ -113,6 +127,31 @@ void parseCommand(string cmd) {
         free((string*) parts.buf[i]);
     }
     destroyContainer(&parts);
+}
+
+unsigned int isValidSize(dir *node,  int *count) {
+    unsigned int sum = 0;
+    if (node->size <= THRESHOLD) {
+        (*count)++;
+        sum += node->size;
+    }
+    for (int i = 0; i <= node->subDirs.top; i++) {
+        sum += isValidSize((dir*) node->subDirs.buf[i], count);
+    }
+    return sum;
+}
+
+unsigned int smallestDir(dir* node) {
+    int revised = root.size - node->size;
+    if (TOTAL_SPACE - revised >= DESIRED) {
+        unsigned int min = node->size;
+        for (int i = 0; i <= node->subDirs.top; i++) {
+            unsigned int temp = smallestDir((dir*) node->subDirs.buf[i]);
+            min = (temp < min)? temp : min;
+        }
+        return min;
+    }
+    return INT_MAX;
 }
 
 int main(int argc, char* argv[]) {
@@ -138,8 +177,11 @@ int main(int argc, char* argv[]) {
         parseCommand(temp);
         destroyString(&temp);
     }
-    unsigned int minDirSize = 0;
-    printf("Smallest Directory Size: %d\n", minDirSize);
+    unsigned int minDirSize = smallestDir(&root);
+    int count = 0;
+    unsigned int space = isValidSize(&root, &count);
+    printf("Number of Valid Directories: %d (%d bytes)\n", count, space);
+    printf("Optimal Directory Size: %d\n", minDirSize);
 
     destroyDir(&root);
     destroyString(&input);

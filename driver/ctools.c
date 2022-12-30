@@ -109,18 +109,13 @@ int pop_back(container *a) {
 
 static void expand_container(container *a) {
     size_t *tmp = malloc(sizeof(size_t) * a->size * 2);
-    memcpy(&tmp, a->buf, sizeof(size_t) * a->size);
-    memset(&tmp[a->size], 0, sizeof(size_t) * a->size);
+    memcpy(tmp, a->buf, sizeof(size_t) * a->size);
     a->size *= 2;
     free(a->buf);
     a->buf = tmp;
 }
 
 int push_back(container *a, size_t b) {
-    if (a->top ==  a->size - 1) {
-        LOG("ERROR: push_back function failed -> out of room\n");
-        return 0;
-    }
     a->top++;
     if (a->top == a->size) {
         expand_container(a);
