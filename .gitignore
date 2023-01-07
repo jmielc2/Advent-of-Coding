@@ -5,6 +5,7 @@ Template/**
 test.txt
 .vscode/**
 **/Makefile
+*.html
 
 # Compiled Object files
 *.slo
