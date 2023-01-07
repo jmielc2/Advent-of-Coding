@@ -55,13 +55,14 @@ void processMoves(FILE* file) {
         }
         destroyContainer(&temp);
     }
+    destroyString(&input);
 }
 
 int main(int argc, char* argv[]) {
     char* filename = "input.txt";
     if (argc == 2) {
         filename = argv[1];
-    } else if (argc > 2) {
+    } else if (argc > 2)  {
         fprintf(stderr, "Usage: %s | <filename>\n", argv[0]);
         return -1;
     }

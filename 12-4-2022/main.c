@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
             vals[k] = atoi(a.buf);
             j++;
             i = j;
-            destroyString(a);
+            destroyString(&a);
         }
         if (overlap(vals)) {
             count++;
@@ -53,6 +53,6 @@ int main(int argc, char* argv[]) {
     fclose(file);
     
     printf("Total: %d\n", count);
-    destroyString(input);
+    destroyString(&input);
     return 0;
 }

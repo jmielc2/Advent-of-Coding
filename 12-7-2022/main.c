@@ -1,4 +1,5 @@
 #include "../include/ctools.h"
+#include <limits.h>
 
 #define THRESHOLD 100000
 #define DESIRED 30000000
@@ -24,6 +25,7 @@ void destroyDir(dir* cur) {
     destroyString(&cur->name);
     for (int i = 0; i <= cur->subDirs.top; i++) {
         destroyDir((dir*) cur->subDirs.buf[i]);
+        free((dir*) cur->subDirs.buf[i]);
     }
     destroyContainer(&(cur->subDirs));
 }
